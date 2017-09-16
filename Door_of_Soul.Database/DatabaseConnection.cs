@@ -12,7 +12,7 @@ namespace Door_of_Soul.Database
         protected abstract string DatabaseName { get; }
         private object connectionLock = new object();
 
-        public abstract bool Connect(string hostName, string userName, string password, string database, string charset, out string errorMessage);
+        public abstract bool Connect(string hostName, int port, string userName, string password, string databasePrefix, string charset, out string errorMessage);
         public void Dispose()
         {
             Connection?.Dispose();

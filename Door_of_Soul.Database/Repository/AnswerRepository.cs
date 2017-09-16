@@ -8,9 +8,14 @@ namespace Door_of_Soul.Database.Repository
 {
     public abstract class AnswerRepository : CrudSubjectRepository<int, AnswerData>
     {
-        public static AnswerRepository Instance { get; protected set; }
+        public static AnswerRepository Instance { get; private set; }
+        public static void Initialize(AnswerRepository instance)
+        {
+            Instance = instance;
+        }
         public abstract OperationReturnCode IsAnswerNameValid(string answerName, out string errorMessage);
         public abstract OperationReturnCode Register(string answerName, string basicPassword, out int answerId, out string errorMessage);
+        public abstract OperationReturnCode Login(string answerName, string basicPassword, out int answerId, out string errorMessage);
 
         public string HashPassword(string password)
         {

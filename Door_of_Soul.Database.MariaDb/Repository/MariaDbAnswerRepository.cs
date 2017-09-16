@@ -6,13 +6,8 @@ using MySql.Data.MySqlClient;
 
 namespace Door_of_Soul.Database.MariaDb.Repository
 {
-    class MariaDbAnswerRepository : AnswerRepository
+    public class MariaDbAnswerRepository : AnswerRepository
     {
-        static MariaDbAnswerRepository()
-        {
-            Instance = new MariaDbAnswerRepository();
-        }
-
         public override OperationReturnCode Create(AnswerData subject, out int subjectId, out string errorMessage)
         {
             return ThroneDataConnection<MySqlConnection>.Instance.SendQuery(
@@ -138,7 +133,7 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                 },
                 result: out subject,
                 errorMessage: out errorMessage,
-                useLock: true);
+                useLock: false);
         }
 
         public override OperationReturnCode Register(string answerName, string basicPassword, out int answerId, out string errorMessage)
@@ -191,6 +186,40 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                 },
                 errorMessage: out errorMessage,
                 useLock: true);
+        }
+
+        public override OperationReturnCode Login(string answerName, string basicPassword, out int answerId, out string errorMessage)
+        {
+            return ThroneDataConnection<MySqlConnection>.Instance.SendQuery(
+                query: (MySqlConnection connection, out int id, out string message) =>
+                {
+                    string sqlString = @"SELECT  
+                        AnswerId
+                        from AnswerCollection WHERE AnswerName = @answerName AND BasicPasswordHash = @basicPasswordHash;";
+                    using (MySqlCommand command = new MySqlCommand(sqlString, connection))
+                    {
+                        command.Parameters.AddWithValue("answerName", answerName);
+                        command.Parameters.AddWithValue("basicPasswordHash", HashPassword(basicPassword));
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                id = reader.GetInt32(0);
+                                message = "";
+                                return OperationReturnCode.Successiful;
+                            }
+                            else
+                            {
+                                id = 0;
+                                message = $"MariaDbAnswerRepository Login Failed, AnswerName:{answerName}";
+                                return OperationReturnCode.AuthenticationFailed;
+                            }
+                        }
+                    }
+                },
+                result: out answerId,
+                errorMessage: out errorMessage,
+                useLock: false);
         }
     }
 }

@@ -4,19 +4,13 @@ using System;
 
 namespace Door_of_Soul.Database.MariaDb.Connection
 {
-    class MariaDbThroneDataConnection : ThroneDataConnection<MySqlConnection>
+    public class MariaDbThroneDataConnection : ThroneDataConnection<MySqlConnection>
     {
-        static MariaDbThroneDataConnection()
-        {
-            Instance = new MariaDbThroneDataConnection();
-        }
         protected override string DatabaseName { get { return "ThroneData"; } }
 
-        private MariaDbThroneDataConnection() { }
-
-        public override bool Connect(string hostName, string userName, string password, string database, string charset, out string errorMessage)
+        public override bool Connect(string hostName, int port, string userName, string password, string databasePrefix, string charset, out string errorMessage)
         {
-            string connectString = $"server={hostName};uid={userName};pwd={password};database={3}.{DatabaseName};charset={charset}";
+            string connectString = $"server={hostName};port={port};uid={userName};pwd={password};database={databasePrefix}.{DatabaseName};charset={charset}";
             try
             {
                 Connection = new MySqlConnection(connectString);
