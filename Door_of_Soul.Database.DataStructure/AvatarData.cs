@@ -5,5 +5,6 @@
         public int avatarId;
         public int entityId;
         public string avatarName;
+        public int[] soulIds;
     }
 }

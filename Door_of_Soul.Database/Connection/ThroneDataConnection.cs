@@ -9,5 +9,7 @@ namespace Door_of_Soul.Database.Connection
         {
             Instance = instance;
         }
+
+        protected override string DatabaseName { get { return "ThroneData"; } }
     }
 }

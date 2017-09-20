@@ -4,7 +4,7 @@ using System;
 
 namespace Door_of_Soul.Database.MariaDb.Connection
 {
-    public class MariaDbThroneDataConnection : ThroneDataConnection<MySqlConnection>
+    public class MariaDbLoveDataConnection : LoveDataConnection<MySqlConnection>
     {
         public override bool Connect(string serverAddress, int port, string username, string password, string databasePrefix, string charset, out string errorMessage)
         {

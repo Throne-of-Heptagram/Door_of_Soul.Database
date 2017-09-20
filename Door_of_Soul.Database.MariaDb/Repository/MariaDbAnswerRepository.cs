@@ -1,17 +1,19 @@
 ﻿using Door_of_Soul.Core.Protocol;
 using Door_of_Soul.Database.Connection;
 using Door_of_Soul.Database.DataStructure;
+using Door_of_Soul.Database.Relation;
 using Door_of_Soul.Database.Repository;
 using MySql.Data.MySqlClient;
+using System.Collections.Generic;
 
 namespace Door_of_Soul.Database.MariaDb.Repository
 {
     public class MariaDbAnswerRepository : AnswerRepository
     {
-        public override OperationReturnCode Create(AnswerData subject, out int subjectId, out string errorMessage)
+        public override OperationReturnCode Create(AnswerData subject, out string errorMessage, out int subjectId)
         {
-            return ThroneDataConnection<MySqlConnection>.Instance.SendQuery(
-                query: (MySqlConnection connection, out int answerId, out string message) =>
+            OperationReturnCode returnCode = ThroneDataConnection<MySqlConnection>.Instance.SendQuery(
+                query: (MySqlConnection connection, out string message, out int answerId) =>
                 {
                     string sqlString = @"INSERT INTO AnswerCollection 
                         (AnswerName, BasicPasswordHash) VALUES (@answerName, @basicPasswordHash);
@@ -31,7 +33,7 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                             else
                             {
                                 answerId = 0;
-                                message = "MariaDbAnswerRepository Create DbNoChanged";
+                                message = $"MariaDbAnswerRepository Create DbNoChanged AnswerName:{subject.answerName}";
                                 return OperationReturnCode.DbNoChanged;
                             }
                         }
@@ -40,6 +42,16 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                 result: out subjectId,
                 errorMessage: out errorMessage,
                 useLock: true);
+            if (returnCode == OperationReturnCode.Successiful)
+            {
+                for(int i = 0; i < subject.soulIds.Length; i++)
+                {
+                    returnCode = TrinityRelation.Instance.LinkAnswerSoul(subject.answerId, subject.soulIds[i], out errorMessage);
+                    if (returnCode != OperationReturnCode.Successiful)
+                        break;
+                }
+            }
+            return returnCode;
         }
 
         public override OperationReturnCode Delete(int subjectId, out string errorMessage)
@@ -57,7 +69,7 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                         }
                         else
                         {
-                            message = "MariaDbAnswerRepository Delete DbNoChanged";
+                            message = $"MariaDbAnswerRepository Delete DbNoChanged AnswerId:{subjectId}";
                             return OperationReturnCode.DbNoChanged;
                         }
                     }
@@ -96,13 +108,13 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                     }
                 },
                 errorMessage: out errorMessage,
-                useLock: true);
+                useLock: false);
         }
 
-        public override OperationReturnCode Read(int subjectId, out AnswerData subject, out string errorMessage)
+        public override OperationReturnCode Read(int subjectId, out string errorMessage, out AnswerData subject)
         {
-            return ThroneDataConnection<MySqlConnection>.Instance.SendQuery(
-                query: (MySqlConnection connection, out AnswerData answerData, out string message) =>
+            OperationReturnCode returnCode = ThroneDataConnection<MySqlConnection>.Instance.SendQuery(
+                query: (MySqlConnection connection, out string message, out AnswerData answerData) =>
                 {
                     string sqlString = @"SELECT  
                         AnswerName
@@ -117,6 +129,7 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                                 string answerNamed = reader.GetString(0);
                                 answerData = new AnswerData
                                 {
+                                    answerId = subjectId,
                                     answerName = answerNamed
                                 };
                                 message = "";
@@ -134,26 +147,38 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                 result: out subject,
                 errorMessage: out errorMessage,
                 useLock: false);
-        }
-
-        public override OperationReturnCode Register(string answerName, string basicPassword, out int answerId, out string errorMessage)
-        {
-            OperationReturnCode answerNameCheckReturn = IsAnswerNameValid(answerName, out errorMessage);
-            if (answerNameCheckReturn != OperationReturnCode.Successiful)
+            if (returnCode == OperationReturnCode.Successiful)
             {
-                answerId = 0;
-                return answerNameCheckReturn;
+                return ReadSoulIds(subject, out errorMessage, out subject);
             }
             else
             {
-                return Create(
-                    subject: new AnswerData
-                    {
-                        answerName = answerName,
-                        basicPasswordHash = HashPassword(basicPassword)
-                    },
-                    subjectId: out answerId,
-                    errorMessage: out errorMessage);
+                return returnCode;
+            }
+        }
+
+        public override OperationReturnCode Register(string answerName, string basicPassword, out string errorMessage, out int answerId)
+        {
+            lock(registerLock)
+            {
+                OperationReturnCode answerNameCheckReturn = IsAnswerNameValid(answerName, out errorMessage);
+                if (answerNameCheckReturn != OperationReturnCode.Successiful)
+                {
+                    answerId = 0;
+                    return answerNameCheckReturn;
+                }
+                else
+                {
+                    return Create(
+                        subject: new AnswerData
+                        {
+                            answerName = answerName,
+                            basicPasswordHash = HashPassword(basicPassword),
+                            soulIds = new int[0]
+                        },
+                        subjectId: out answerId,
+                        errorMessage: out errorMessage);
+                }
             }
         }
 
@@ -178,7 +203,7 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                             }
                             else
                             {
-                                message = $"MariaDbAnswerRepository Update DbNoChanged";
+                                message = $"MariaDbAnswerRepository Update DbNoChanged AnswerId:{subject.answerId}";
                                 return OperationReturnCode.DbNoChanged;
                             }
                         }
@@ -188,10 +213,10 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                 useLock: true);
         }
 
-        public override OperationReturnCode Login(string answerName, string basicPassword, out int answerId, out string errorMessage)
+        public override OperationReturnCode Login(string answerName, string basicPassword, out string errorMessage, out int answerId)
         {
             return ThroneDataConnection<MySqlConnection>.Instance.SendQuery(
-                query: (MySqlConnection connection, out int id, out string message) =>
+                query: (MySqlConnection connection, out string message, out int id) =>
                 {
                     string sqlString = @"SELECT  
                         AnswerId
@@ -218,6 +243,36 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                     }
                 },
                 result: out answerId,
+                errorMessage: out errorMessage,
+                useLock: false);
+        }
+
+        protected override OperationReturnCode ReadSoulIds(AnswerData sourceAnswerData, out string errorMessage, out AnswerData resultAnswerData)
+        {
+            return LoveDataConnection<MySqlConnection>.Instance.SendQuery(
+                query: (MySqlConnection connection, out string message, out AnswerData answerData) =>
+                {
+                    string sqlString = @"SELECT SoulId
+                        from AnswerSoulRelations WHERE AnswerId = @answerId;";
+                    using (MySqlCommand command = new MySqlCommand(sqlString, connection))
+                    {
+                        command.Parameters.AddWithValue("answerId", sourceAnswerData.answerId);
+                        using (MySqlDataReader reader = command.ExecuteReader())
+                        {
+                            List<int> soulIds = new List<int>();
+                            while (reader.Read())
+                            {
+                                int soulId = reader.GetInt32(0);
+                                soulIds.Add(soulId);
+                            }
+                            sourceAnswerData.soulIds = soulIds.ToArray();
+                            answerData = sourceAnswerData;
+                            message = "";
+                            return OperationReturnCode.Successiful;
+                        }
+                    }
+                },
+                result: out resultAnswerData,
                 errorMessage: out errorMessage,
                 useLock: false);
         }

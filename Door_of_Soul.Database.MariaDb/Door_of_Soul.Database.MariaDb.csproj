@@ -44,9 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connection\MariaDbLoveDataConnection.cs" />
+    <Compile Include="Connection\MariaDbWillDataConnection.cs" />
+    <Compile Include="Connection\MariaDbLifeDataConnection.cs" />
     <Compile Include="Connection\MariaDbThroneDataConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Relation\MariaDbTrinityRelation.cs" />
     <Compile Include="Repository\MariaDbAnswerRepository.cs" />
+    <Compile Include="Repository\MariaDbAvatarRepository.cs" />
+    <Compile Include="Repository\MariaDbSoulRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Door_of_Soul.Core\Door_of_Soul.Core\Door_of_Soul.Core.csproj">

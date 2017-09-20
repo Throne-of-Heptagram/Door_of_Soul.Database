@@ -2,8 +2,9 @@
 {
     public struct SoulData
     {
-        public int answerId;
         public int soulId;
         public string soulName;
+        public int answerId;
+        public int[] avatarIds;
     }
 }

@@ -5,5 +5,6 @@
         public int answerId;
         public string answerName;
         public string basicPasswordHash;
+        public int[] soulIds;
     }
 }
