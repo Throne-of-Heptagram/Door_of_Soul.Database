@@ -33,8 +33,7 @@ namespace Door_of_Soul.Database.MariaDb.Relation
                         }
                     }
                 },
-                errorMessage: out errorMessage,
-                useLock: true);
+                errorMessage: out errorMessage);
         }
 
         public override OperationReturnCode LinkSoulAvatar(int soulId, int avatarId, out string errorMessage)
@@ -63,8 +62,7 @@ namespace Door_of_Soul.Database.MariaDb.Relation
                         }
                     }
                 },
-                errorMessage: out errorMessage,
-                useLock: true);
+                errorMessage: out errorMessage);
         }
 
         public override OperationReturnCode UnlinkAnswerSoul(int answerId, int soulId, out string errorMessage)
@@ -92,8 +90,7 @@ namespace Door_of_Soul.Database.MariaDb.Relation
                         }
                     }
                 },
-                errorMessage: out errorMessage,
-                useLock: true);
+                errorMessage: out errorMessage);
         }
 
         public override OperationReturnCode UnlinkSoulAvatar(int soulId, int avatarId, out string errorMessage)
@@ -121,8 +118,7 @@ namespace Door_of_Soul.Database.MariaDb.Relation
                         }
                     }
                 },
-                errorMessage: out errorMessage,
-                useLock: true);
+                errorMessage: out errorMessage);
         }
     }
 }
