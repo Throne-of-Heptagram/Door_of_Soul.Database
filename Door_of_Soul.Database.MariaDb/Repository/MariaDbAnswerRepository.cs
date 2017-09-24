@@ -40,8 +40,7 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                     }
                 },
                 result: out subjectId,
-                errorMessage: out errorMessage,
-                useLock: true);
+                errorMessage: out errorMessage);
             if (returnCode == OperationReturnCode.Successiful)
             {
                 for(int i = 0; i < subject.soulIds.Length; i++)
@@ -74,8 +73,7 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                         }
                     }
                 },
-                errorMessage: out errorMessage,
-                useLock: true);
+                errorMessage: out errorMessage);
         }
 
         public override OperationReturnCode IsAnswerNameValid(string answerName, out string errorMessage)
@@ -107,8 +105,7 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                         }
                     }
                 },
-                errorMessage: out errorMessage,
-                useLock: false);
+                errorMessage: out errorMessage);
         }
 
         public override OperationReturnCode Read(int subjectId, out string errorMessage, out AnswerData subject)
@@ -145,8 +142,7 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                     }
                 },
                 result: out subject,
-                errorMessage: out errorMessage,
-                useLock: false);
+                errorMessage: out errorMessage);
             if (returnCode == OperationReturnCode.Successiful)
             {
                 return ReadSoulIds(subject, out errorMessage, out subject);
@@ -209,8 +205,7 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                         }
                     }
                 },
-                errorMessage: out errorMessage,
-                useLock: true);
+                errorMessage: out errorMessage);
         }
 
         public override OperationReturnCode Login(string answerName, string basicPassword, out string errorMessage, out int answerId)
@@ -243,8 +238,7 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                     }
                 },
                 result: out answerId,
-                errorMessage: out errorMessage,
-                useLock: false);
+                errorMessage: out errorMessage);
         }
 
         protected override OperationReturnCode ReadSoulIds(AnswerData sourceAnswerData, out string errorMessage, out AnswerData resultAnswerData)
@@ -273,8 +267,7 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                     }
                 },
                 result: out resultAnswerData,
-                errorMessage: out errorMessage,
-                useLock: false);
+                errorMessage: out errorMessage);
         }
     }
 }

@@ -40,8 +40,7 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                     }
                 },
                 result: out subjectId,
-                errorMessage: out errorMessage,
-                useLock: true);
+                errorMessage: out errorMessage);
             if (returnCode == OperationReturnCode.Successiful)
             {
                 for (int i = 0; i < subject.soulIds.Length; i++)
@@ -74,8 +73,7 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                         }
                     }
                 },
-                errorMessage: out errorMessage,
-                useLock: true);
+                errorMessage: out errorMessage);
         }
 
         public override OperationReturnCode Read(int subjectId, out string errorMessage, out AvatarData subject)
@@ -113,8 +111,7 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                     }
                 },
                 result: out subject,
-                errorMessage: out errorMessage,
-                useLock: false);
+                errorMessage: out errorMessage);
             if (returnCode == OperationReturnCode.Successiful)
             {
                 return ReadSoulIds(subject, out errorMessage, out subject);
@@ -153,8 +150,7 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                         }
                     }
                 },
-                errorMessage: out errorMessage,
-                useLock: true);
+                errorMessage: out errorMessage);
         }
 
         protected override OperationReturnCode ReadSoulIds(AvatarData sourceAvatarData, out string errorMessage, out AvatarData resultAvatarData)
@@ -183,8 +179,7 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                     }
                 },
                 result: out resultAvatarData,
-                errorMessage: out errorMessage,
-                useLock: false);
+                errorMessage: out errorMessage);
         }
     }
 }

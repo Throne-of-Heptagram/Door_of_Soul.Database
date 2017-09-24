@@ -17,18 +17,11 @@ namespace Door_of_Soul.Database
         {
             Connection?.Dispose();
         }
-        public OperationReturnCode SendQuery(QueryDelegate query, out string errorMessage, bool useLock = false)
+        public OperationReturnCode SendQuery(QueryDelegate query, out string errorMessage)
         {
             if (Connection != null)
             {
-                if(useLock)
-                {
-                    lock(connectionLock)
-                    {
-                        return ExecuteQuery(query, out errorMessage);
-                    }
-                }
-                else
+                lock (connectionLock)
                 {
                     return ExecuteQuery(query, out errorMessage);
                 }
@@ -39,18 +32,11 @@ namespace Door_of_Soul.Database
                 return OperationReturnCode.NullObject;
             }
         }
-        public OperationReturnCode SendQuery<TQueryResult>(QueryWithResultDelegate<TQueryResult> query, out string errorMessage, out TQueryResult result, bool useLock = false)
+        public OperationReturnCode SendQuery<TQueryResult>(QueryWithResultDelegate<TQueryResult> query, out string errorMessage, out TQueryResult result)
         {
             if (Connection != null)
             {
-                if (useLock)
-                {
-                    lock (connectionLock)
-                    {
-                        return ExecuteQuery(query, out errorMessage, out result);
-                    }
-                }
-                else
+                lock (connectionLock)
                 {
                     return ExecuteQuery(query, out errorMessage, out result);
                 }
