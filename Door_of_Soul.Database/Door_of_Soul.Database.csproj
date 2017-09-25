@@ -40,27 +40,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connection\EternityDataConnection.cs" />
     <Compile Include="Connection\LifeDataConnection.cs" />
     <Compile Include="Connection\LoveDataConnection.cs" />
     <Compile Include="Connection\ThroneDataConnection.cs" />
     <Compile Include="Connection\WillDataConnection.cs" />
     <Compile Include="CrudSubjectRepository.cs" />
     <Compile Include="DatabaseConnection.cs" />
+    <Compile Include="DataStructure\AnswerData.cs" />
+    <Compile Include="DataStructure\AvatarData.cs" />
+    <Compile Include="DataStructure\EndPointData.cs" />
+    <Compile Include="DataStructure\EntityData.cs" />
+    <Compile Include="DataStructure\SceneData.cs" />
+    <Compile Include="DataStructure\SoulData.cs" />
+    <Compile Include="DataStructure\WorldData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Relation\TrinityRelation.cs" />
-    <Compile Include="Repository\AnswerRepository.cs" />
-    <Compile Include="Repository\AvatarRepository.cs" />
-    <Compile Include="Repository\SoulRepository.cs" />
+    <Compile Include="Relation\Throne\TrinityRelation.cs" />
+    <Compile Include="Repository\Eternity\EndPointRepository.cs" />
+    <Compile Include="Repository\Throne\AnswerRepository.cs" />
+    <Compile Include="Repository\Life\AvatarRepository.cs" />
+    <Compile Include="Repository\Will\SoulRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Door_of_Soul.Core\Door_of_Soul.Core\Door_of_Soul.Core.csproj">
       <Project>{34c59e1e-eee2-4b13-9802-39dae818abfd}</Project>
       <Name>Door_of_Soul.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Door_of_Soul.Database.DataStructure\Door_of_Soul.Database.DataStructure.csproj">
-      <Project>{b23d26fc-f698-463c-9050-9dee3329a8b9}</Project>
-      <Name>Door_of_Soul.Database.DataStructure</Name>
-    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

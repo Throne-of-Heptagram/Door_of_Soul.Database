@@ -1,12 +1,11 @@
 ﻿using Door_of_Soul.Core.Protocol;
 using Door_of_Soul.Database.Connection;
 using Door_of_Soul.Database.DataStructure;
-using Door_of_Soul.Database.Relation;
-using Door_of_Soul.Database.Repository;
+using Door_of_Soul.Database.Relation.Throne;
+using Door_of_Soul.Database.Repository.Throne;
 using MySql.Data.MySqlClient;
-using System.Collections.Generic;
 
-namespace Door_of_Soul.Database.MariaDb.Repository
+namespace Door_of_Soul.Database.MariaDb.Repository.Throne
 {
     public class MariaDbAnswerRepository : AnswerRepository
     {
@@ -145,7 +144,7 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                 errorMessage: out errorMessage);
             if (returnCode == OperationReturnCode.Successiful)
             {
-                return ReadSoulIds(subject, out errorMessage, out subject);
+                return TrinityRelation.Instance.AnswerReadSoulIds(subject, out errorMessage, out subject);
             }
             else
             {
@@ -238,35 +237,6 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                     }
                 },
                 result: out answerId,
-                errorMessage: out errorMessage);
-        }
-
-        protected override OperationReturnCode ReadSoulIds(AnswerData sourceAnswerData, out string errorMessage, out AnswerData resultAnswerData)
-        {
-            return LoveDataConnection<MySqlConnection>.Instance.SendQuery(
-                query: (MySqlConnection connection, out string message, out AnswerData answerData) =>
-                {
-                    string sqlString = @"SELECT SoulId
-                        from AnswerSoulRelations WHERE AnswerId = @answerId;";
-                    using (MySqlCommand command = new MySqlCommand(sqlString, connection))
-                    {
-                        command.Parameters.AddWithValue("answerId", sourceAnswerData.answerId);
-                        using (MySqlDataReader reader = command.ExecuteReader())
-                        {
-                            List<int> soulIds = new List<int>();
-                            while (reader.Read())
-                            {
-                                int soulId = reader.GetInt32(0);
-                                soulIds.Add(soulId);
-                            }
-                            sourceAnswerData.soulIds = soulIds.ToArray();
-                            answerData = sourceAnswerData;
-                            message = "";
-                            return OperationReturnCode.Successiful;
-                        }
-                    }
-                },
-                result: out resultAnswerData,
                 errorMessage: out errorMessage);
         }
     }

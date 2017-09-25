@@ -1,7 +1,6 @@
-﻿using Door_of_Soul.Core.Protocol;
-using Door_of_Soul.Database.DataStructure;
+﻿using Door_of_Soul.Database.DataStructure;
 
-namespace Door_of_Soul.Database.Repository
+namespace Door_of_Soul.Database.Repository.Life
 {
     public abstract class AvatarRepository : CrudSubjectRepository<int, AvatarData>
     {
@@ -10,7 +9,5 @@ namespace Door_of_Soul.Database.Repository
         {
             Instance = instance;
         }
-
-        protected abstract OperationReturnCode ReadSoulIds(AvatarData sourceAvatarData, out string errorMessage, out AvatarData resultAvatarData);
     }
 }

@@ -1,12 +1,11 @@
 ﻿using Door_of_Soul.Core.Protocol;
 using Door_of_Soul.Database.Connection;
 using Door_of_Soul.Database.DataStructure;
-using Door_of_Soul.Database.Relation;
-using Door_of_Soul.Database.Repository;
+using Door_of_Soul.Database.Relation.Throne;
+using Door_of_Soul.Database.Repository.Life;
 using MySql.Data.MySqlClient;
-using System.Collections.Generic;
 
-namespace Door_of_Soul.Database.MariaDb.Repository
+namespace Door_of_Soul.Database.MariaDb.Repository.Life
 {
     public class MariaDbAvatarRepository : AvatarRepository
     {
@@ -114,7 +113,7 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                 errorMessage: out errorMessage);
             if (returnCode == OperationReturnCode.Successiful)
             {
-                return ReadSoulIds(subject, out errorMessage, out subject);
+                return TrinityRelation.Instance.AvatarReadSoulIds(subject, out errorMessage, out subject);
             }
             else
             {
@@ -150,35 +149,6 @@ namespace Door_of_Soul.Database.MariaDb.Repository
                         }
                     }
                 },
-                errorMessage: out errorMessage);
-        }
-
-        protected override OperationReturnCode ReadSoulIds(AvatarData sourceAvatarData, out string errorMessage, out AvatarData resultAvatarData)
-        {
-            return LoveDataConnection<MySqlConnection>.Instance.SendQuery(
-                query: (MySqlConnection connection, out string message, out AvatarData avatarData) =>
-                {
-                    string sqlString = @"SELECT SoulId
-                        from SoulAvatarRelations WHERE AvatarId = @avatarId;";
-                    using (MySqlCommand command = new MySqlCommand(sqlString, connection))
-                    {
-                        command.Parameters.AddWithValue("avatarId", sourceAvatarData.avatarId);
-                        using (MySqlDataReader reader = command.ExecuteReader())
-                        {
-                            List<int> soulIds = new List<int>();
-                            while (reader.Read())
-                            {
-                                int soulId = reader.GetInt32(0);
-                                soulIds.Add(soulId);
-                            }
-                            sourceAvatarData.soulIds = soulIds.ToArray();
-                            avatarData = sourceAvatarData;
-                            message = "";
-                            return OperationReturnCode.Successiful;
-                        }
-                    }
-                },
-                result: out resultAvatarData,
                 errorMessage: out errorMessage);
         }
     }

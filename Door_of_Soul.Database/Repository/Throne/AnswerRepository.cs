@@ -4,7 +4,7 @@ using System;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Door_of_Soul.Database.Repository
+namespace Door_of_Soul.Database.Repository.Throne
 {
     public abstract class AnswerRepository : CrudSubjectRepository<int, AnswerData>
     {
@@ -26,6 +26,5 @@ namespace Door_of_Soul.Database.Repository
             string passwordHash = Convert.ToBase64String(sha512.ComputeHash(Encoding.Default.GetBytes(password)));
             return passwordHash;
         }
-        protected abstract OperationReturnCode ReadSoulIds(AnswerData sourceAnswerData, out string errorMessage, out AnswerData resultAnswerData);
     }
 }

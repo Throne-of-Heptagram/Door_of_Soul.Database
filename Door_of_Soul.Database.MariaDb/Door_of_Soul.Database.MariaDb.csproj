@@ -44,24 +44,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connection\MariaDbEternityDataConnection.cs" />
     <Compile Include="Connection\MariaDbLoveDataConnection.cs" />
     <Compile Include="Connection\MariaDbWillDataConnection.cs" />
     <Compile Include="Connection\MariaDbLifeDataConnection.cs" />
     <Compile Include="Connection\MariaDbThroneDataConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Relation\MariaDbTrinityRelation.cs" />
-    <Compile Include="Repository\MariaDbAnswerRepository.cs" />
-    <Compile Include="Repository\MariaDbAvatarRepository.cs" />
-    <Compile Include="Repository\MariaDbSoulRepository.cs" />
+    <Compile Include="Relation\Throne\MariaDbTrinityRelation.cs" />
+    <Compile Include="Repository\Eternity\MariaDbEndPointRepository.cs" />
+    <Compile Include="Repository\Throne\MariaDbAnswerRepository.cs" />
+    <Compile Include="Repository\Life\MariaDbAvatarRepository.cs" />
+    <Compile Include="Repository\Will\MariaDbSoulRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Door_of_Soul.Core\Door_of_Soul.Core\Door_of_Soul.Core.csproj">
       <Project>{34c59e1e-eee2-4b13-9802-39dae818abfd}</Project>
       <Name>Door_of_Soul.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Door_of_Soul.Database.DataStructure\Door_of_Soul.Database.DataStructure.csproj">
-      <Project>{b23d26fc-f698-463c-9050-9dee3329a8b9}</Project>
-      <Name>Door_of_Soul.Database.DataStructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\Door_of_Soul.Database\Door_of_Soul.Database.csproj">
       <Project>{6f46fcdf-e62c-413e-ab14-0870fcebc412}</Project>
