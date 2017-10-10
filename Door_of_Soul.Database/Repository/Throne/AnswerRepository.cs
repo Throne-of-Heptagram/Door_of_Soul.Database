@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Door_of_Soul.Database.Repository.Throne
 {
-    public abstract class AnswerRepository : CrudSubjectRepository<int, AnswerData>
+    public abstract class AnswerRepository : CrudSubjectDbRepository<int, AnswerData>
     {
         public static AnswerRepository Instance { get; private set; }
         public static void Initialize(AnswerRepository instance)

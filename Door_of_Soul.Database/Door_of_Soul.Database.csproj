@@ -45,7 +45,7 @@
     <Compile Include="Connection\LoveDataConnection.cs" />
     <Compile Include="Connection\ThroneDataConnection.cs" />
     <Compile Include="Connection\WillDataConnection.cs" />
-    <Compile Include="CrudSubjectRepository.cs" />
+    <Compile Include="CrudSubjectDbRepository.cs" />
     <Compile Include="DatabaseConnection.cs" />
     <Compile Include="DataStructure\AnswerData.cs" />
     <Compile Include="DataStructure\AvatarData.cs" />
@@ -55,6 +55,7 @@
     <Compile Include="DataStructure\SoulData.cs" />
     <Compile Include="DataStructure\WorldData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReadOnlySubjecDbRepository.cs" />
     <Compile Include="Relation\Throne\TrinityRelation.cs" />
     <Compile Include="Repository\Eternity\EndPointRepository.cs" />
     <Compile Include="Repository\Throne\AnswerRepository.cs" />

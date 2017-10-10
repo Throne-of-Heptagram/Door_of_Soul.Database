@@ -2,7 +2,7 @@
 
 namespace Door_of_Soul.Database
 {
-    public abstract class CrudSubjectRepository<TId, TSubject>
+    public abstract class CrudSubjectDbRepository<TId, TSubject>
     {
         public abstract OperationReturnCode Create(TSubject subject, out string errorMessage, out TId subjectId);
         public abstract OperationReturnCode Read(TId subjectId, out string errorMessage, out TSubject subject);
